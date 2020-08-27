@@ -1,6 +1,5 @@
 import { StyledForm, StyledInput, StyledSearch } from './StyledForm';
 import { StyledLink } from './StyledLink';
-import { Loader } from './StyledLoader';
 import { StyledNavBar, StyledNavLink } from './StyledNav';
 import { StyledTable, StyledTd } from './StyledTable';
 import { GreenButton, CancelButton, ButtonGroup } from './StyledButton';
@@ -19,7 +18,6 @@ export {
   StyledTd,
   StyledLink,
   StyledPagination,
-  Loader,
   GreenButton,
   CancelButton,
   ButtonGroup,

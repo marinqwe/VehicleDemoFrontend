@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useObserver } from 'mobx-react';
 import { StyledLink, StyledTable, StyledTd } from '../layouts';
-import { Loader } from '../layouts/StyledLoader';
 import { useStores } from '../common/stores/use-stores';
 
 export default function VehicleMakesList() {
@@ -23,40 +22,32 @@ export default function VehicleMakesList() {
       });
   };
 
-  return useObserver(() => {
-    if (vehicleMakeStore.loadingVehicles) {
-      return <Loader>Loading vehicles...</Loader>;
-    }
-
-    return (
-      <StyledTable>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Abrv</th>
-            <th></th>
-            <th></th>
+  return useObserver(() => (
+    <StyledTable>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Abrv</th>
+          <th>{vehicleMakeStore.loadingVehicles && 'Loading vehicles...'}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {vehicleMakeStore.vehicleMakes.map(({ makeId, name, abrv }) => (
+          <tr key={makeId}>
+            <td>{makeId}</td>
+            <td>{name}</td>
+            <td>{abrv}</td>
+            <td>
+              <StyledLink to={`/vehiclemakes/edit/${makeId}`}>Edit</StyledLink>
+            </td>
+            <StyledTd onClick={() => handleRemoveVehicleMake(makeId)}>
+              Remove
+            </StyledTd>
           </tr>
-        </thead>
-        <tbody>
-          {vehicleMakeStore.vehicleMakes.map(({ makeId, name, abrv }) => (
-            <tr key={makeId}>
-              <td>{makeId}</td>
-              <td>{name}</td>
-              <td>{abrv}</td>
-              <td>
-                <StyledLink to={`/vehiclemakes/edit/${makeId}`}>
-                  Edit
-                </StyledLink>
-              </td>
-              <StyledTd onClick={() => handleRemoveVehicleMake(makeId)}>
-                Remove
-              </StyledTd>
-            </tr>
-          ))}
-        </tbody>
-      </StyledTable>
-    );
-  });
+        ))}
+      </tbody>
+    </StyledTable>
+  ));
 }
