@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import { VehicleInput } from '../components';
-import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../layouts';
+import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../styles';
 
 function EditVehicleModel({
   match: {
@@ -18,7 +18,9 @@ function EditVehicleModel({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('EDIT SUBMITTED!');
+    vehicleModelStore
+      .vehicleModelStore(id)
+      .then(() => history.push('/vehicle-models'));
   };
 
   return useObserver(() => (

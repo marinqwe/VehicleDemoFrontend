@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useObserver } from 'mobx-react';
-import { StyledLink, StyledTable, StyledTd } from '../layouts';
+import { StyledLink, StyledTable, StyledTd } from '../styles';
 import { useStores } from '../common/stores/use-stores';
 
 export default function VehicleMakesList() {

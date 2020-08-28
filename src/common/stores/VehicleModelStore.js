@@ -53,19 +53,21 @@ export function vehicleModelStore(vehicleModelApi) {
     createVehicleModel() {
       return vehicleModelApi
         .createVehicleModel(this.vehicleModel)
-        .then((res) => {
-          console.log('CREATED :) -> ', res);
-        })
         .catch((err) => {
           throw new Error('Error while creating a vehicle', err);
+        });
+    },
+    editVehicleModel(id) {
+      return vehicleModelApi
+        .editVehicleModel({ id, ...this.vehicleModel })
+        .catch((err) => {
+          throw new Error('Error while editing vehicle.', err);
         });
     },
     removeVehicleModel(id) {
       return vehicleModelApi
         .deleteVehicleModel(id)
-        .then((res) => console.log(res))
         .catch((err) => {
-          console.log(err);
           throw new Error('Error while deleting vehicle model.', err);
         });
     },

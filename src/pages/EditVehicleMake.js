@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import { VehicleInput } from '../components';
-import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../layouts';
+import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../styles';
 
 function EditVehicleMake({
   match: {
@@ -20,7 +20,7 @@ function EditVehicleMake({
     e.preventDefault();
     vehicleMakeStore
       .editVehicleMake(id)
-      .then(() => history.push('/vehiclemakes'));
+      .then(() => history.push('/vehicle-makes'));
   };
 
   return useObserver(() => (

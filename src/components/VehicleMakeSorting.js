@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from '../layouts';
+import { Select } from '../styles';
 import { useStores } from '../common/stores/use-stores';
 
 function VehicleMakeSorting() {

@@ -59,13 +59,11 @@ export function vehicleMakeStore(vehicleMakeApi) {
       return vehicleMakeApi
         .editVehicleMake({ makeId, ...this.vehicleMake })
         .catch((err) => {
-          console.log(err);
           throw new Error('Error while editing vehicle.', err);
         });
     },
     removeVehicleMake(makeId) {
       return vehicleMakeApi.deleteVehicleMake(makeId).catch((err) => {
-        console.log(err);
         throw new Error('Error while deleting vehicle.', err);
       });
     },

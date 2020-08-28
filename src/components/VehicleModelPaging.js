@@ -1,7 +1,7 @@
 import React from 'react';
 import { useObserver } from 'mobx-react';
 import { useStores } from '../common/stores/use-stores';
-import { StyledPagination } from '../layouts';
+import { StyledPagination } from '../styles';
 
 function VehicleModelPaging() {
   const { vehicleModelStore } = useStores();

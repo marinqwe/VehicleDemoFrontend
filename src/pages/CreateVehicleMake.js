@@ -2,7 +2,7 @@ import React from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import { VehicleInput } from '../components';
-import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../layouts';
+import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../styles';
 
 function CreateVehicleMake({ history }) {
   const { vehicleMakeStore } = useStores();
@@ -11,7 +11,7 @@ function CreateVehicleMake({ history }) {
     e.preventDefault();
     vehicleMakeStore
       .createVehicleMake()
-      .then(() => history.push('/vehiclemakes'));
+      .then(() => history.push('/vehicle-makes'));
   };
 
   return useObserver(() => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyledNavBar, StyledNavLink } from '../layouts';
+import { StyledNavBar, StyledNavLink } from '../styles';
 
 function Navbar() {
   return (
@@ -7,10 +7,10 @@ function Navbar() {
       <StyledNavLink exact to='/' activeClassName='yo'>
         Home
       </StyledNavLink>
-      <StyledNavLink to='/vehiclemakes' activeClassName='yo'>
+      <StyledNavLink to='/vehicle-makes' activeClassName='yo'>
         Vehicle Makes
       </StyledNavLink>
-      <StyledNavLink to='/vehiclemodels' activeClassName='yo'>
+      <StyledNavLink to='/vehicle-models' activeClassName='yo'>
         Vehicle Models
       </StyledNavLink>
     </StyledNavBar>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import VehicleInput from './VehicleInput';
-import { GreenButton, StyledSearch } from '../layouts';
+import { GreenButton, StyledSearch } from '../styles';
 
 function VehicleModelFilter() {
   const { vehicleModelStore } = useStores();

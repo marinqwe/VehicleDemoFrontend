@@ -43,8 +43,4 @@ export default class VehicleModelApi {
         },
       },
     });
-
-  static testMe = (urlParams) => {
-    console.log('TESTINGGGG', { ...urlParams });
-  };
 }

@@ -10,7 +10,7 @@ import {
   StyledLink,
   StyledVehiclePage,
   VehiclePageHeading,
-} from '../layouts';
+} from '../styles';
 
 function VehicleMake() {
   return (
@@ -23,7 +23,7 @@ function VehicleMake() {
       <div>
         <StyledLink
           style={{ position: 'absolute', right: '3%' }}
-          to='/vehiclemodels/create'
+          to='/vehicle-models/create'
         >
           ➡ Add a new model
         </StyledLink>

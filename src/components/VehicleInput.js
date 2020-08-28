@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledInput } from '../layouts';
+import { StyledInput } from '../styles';
 
 function VehicleInput({ value, storeKey, ...restProps }) {
   const handleOnChange = (e) => {
