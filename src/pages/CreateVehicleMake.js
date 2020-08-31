@@ -2,16 +2,24 @@ import React from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import { VehicleInput } from '../components';
-import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../styles';
+import {
+  StyledForm,
+  GreenButton,
+  CancelButton,
+  ButtonGroup,
+  StyledError,
+} from '../styles';
 
 function CreateVehicleMake({ history }) {
   const { vehicleMakeStore } = useStores();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    vehicleMakeStore
-      .createVehicleMake()
-      .then(() => history.push('/vehicle-makes'));
+    vehicleMakeStore.createVehicleMake().then(() => {
+      if (!vehicleMakeStore.cudErr) {
+        history.push('/vehicle-makes');
+      }
+    });
   };
 
   return useObserver(() => (
@@ -44,6 +52,9 @@ function CreateVehicleMake({ history }) {
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
+      {vehicleMakeStore.cudErr && (
+        <StyledError>{vehicleMakeStore.cudErr}</StyledError>
+      )}
     </div>
   ));
 }

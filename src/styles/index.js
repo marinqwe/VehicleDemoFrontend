@@ -7,6 +7,7 @@ import { Select } from './StyledSelect';
 import { StyledPagination } from './StyledPagination';
 import { Title } from './StyledText';
 import { StyledVehiclePage, VehiclePageHeading } from './StyledVehicleMake';
+import { StyledError } from './StyledError';
 
 export {
   StyledForm,
@@ -18,6 +19,7 @@ export {
   StyledTd,
   StyledLink,
   StyledPagination,
+  StyledError,
   GreenButton,
   CancelButton,
   ButtonGroup,

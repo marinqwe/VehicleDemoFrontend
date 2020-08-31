@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useObserver } from 'mobx-react';
+import { useStores } from '../common/stores/use-stores';
 import {
   VehicleModelsList,
   VehicleModelFilter,
@@ -10,10 +12,18 @@ import {
   StyledLink,
   StyledVehiclePage,
   VehiclePageHeading,
+  StyledError,
 } from '../styles';
 
-function VehicleMake() {
-  return (
+function VehicleModel() {
+  const { vehicleModelStore } = useStores();
+
+  useEffect(() => {
+    //fetch & pass vehicleModels as props for easier error handling
+    vehicleModelStore.getVehicleModels();
+  }, [vehicleModelStore]);
+
+  return useObserver(() => (
     <StyledVehiclePage>
       <VehiclePageHeading>
         <Title>Vehicle Models page</Title>
@@ -28,11 +38,17 @@ function VehicleMake() {
           ➡ Add a new model
         </StyledLink>
       </div>
-      <VehicleModelPaging />
-      <VehicleModelsList />
-      <VehicleModelPaging />
+      {vehicleModelStore.getErr ? (
+        <StyledError>{vehicleModelStore.getErr}</StyledError>
+      ) : (
+        <>
+          <VehicleModelPaging />
+          <VehicleModelsList vehicleModels={vehicleModelStore.vehicleModels} />
+          <VehicleModelPaging />
+        </>
+      )}
     </StyledVehiclePage>
-  );
+  ));
 }
 
-export default VehicleMake;
+export default VehicleModel;

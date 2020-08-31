@@ -1,7 +1,9 @@
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 export function vehicleMakeStore(vehicleMakeApi) {
   return observable({
+    getErr: null,
+    cudErr: null,
     loadingVehicles: false,
     loadingVehicle: false,
     vehicleMakes: [],
@@ -17,7 +19,9 @@ export function vehicleMakeStore(vehicleMakeApi) {
       abrv: '',
     },
     getVehicleMakes() {
+      this.getErr = null;
       this.loadingVehicles = true;
+
       const params = {
         sortBy: this.sortBy,
         searchString: this.searchString,
@@ -33,38 +37,42 @@ export function vehicleMakeStore(vehicleMakeApi) {
           this.loadingVehicles = false;
         })
         .catch((err) => {
+          this.getErr = 'ERROR: Unable to fetch vehicles.';
           this.loadingVehicles = false;
-          throw new Error('Unable to fetch vehicles.', err);
         });
     },
     getVehicleMake(makeId) {
+      this.getErr = null;
       this.loadingVehicle = true;
       return vehicleMakeApi
         .getVehicleMake(makeId)
         .then(({ data }) => {
-          this.loadingVehicle = false;
           this.vehicleMake = { ...data };
+          this.loadingVehicle = false;
         })
         .catch((err) => {
+          this.getErr = 'ERROR: Unable to fetch the vehicle.';
           this.loadingVehicle = false;
-          throw new Error('Unable to fetch vehicle.', err);
         });
     },
     createVehicleMake() {
+      this.cudErr = null;
       return vehicleMakeApi.createVehicleMake(this.vehicleMake).catch((err) => {
-        throw new Error('Error while creating a vehicle', err);
+        this.cudErr = 'ERROR: Failed to create the vehicle.';
       });
     },
     editVehicleMake(makeId) {
+      this.cudErr = null;
       return vehicleMakeApi
         .editVehicleMake({ makeId, ...this.vehicleMake })
         .catch((err) => {
-          throw new Error('Error while editing vehicle.', err);
+          this.cudErr = 'ERROR: Failed to update the vehicle';
         });
     },
     removeVehicleMake(makeId) {
+      this.cudErr = null;
       return vehicleMakeApi.deleteVehicleMake(makeId).catch((err) => {
-        throw new Error('Error while deleting vehicle.', err);
+        this.cudErr = 'ERROR: Failed to delete the vehicle.';
       });
     },
     setSortBy(sortBy) {
@@ -80,5 +88,13 @@ export function vehicleMakeStore(vehicleMakeApi) {
         ) || 1
       );
     },
+  }, {
+    getVehicleMakes: action,
+    getVehicleMake: action,
+    createVehicleMake: action,
+    editVehicleMake: action,
+    removeVehicleMake: action,
+    setSortBy: action,
+    setPageNumber: action,
   });
 }

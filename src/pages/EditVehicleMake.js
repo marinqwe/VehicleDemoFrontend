@@ -2,7 +2,13 @@ import React, { useEffect } from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import { VehicleInput } from '../components';
-import { StyledForm, GreenButton, CancelButton, ButtonGroup } from '../styles';
+import {
+  StyledForm,
+  GreenButton,
+  CancelButton,
+  ButtonGroup,
+  StyledError,
+} from '../styles';
 
 function EditVehicleMake({
   match: {
@@ -18,9 +24,11 @@ function EditVehicleMake({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    vehicleMakeStore
-      .editVehicleMake(id)
-      .then(() => history.push('/vehicle-makes'));
+    vehicleMakeStore.editVehicleMake(id).then(() => {
+      if (!vehicleMakeStore.cudErr) {
+        history.push('/vehicle-makes');
+      }
+    });
   };
 
   return useObserver(() => (
@@ -53,6 +61,9 @@ function EditVehicleMake({
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
+      {vehicleMakeStore.cudErr && (
+        <StyledError>{vehicleMakeStore.cudErr}</StyledError>
+      )}
     </div>
   ));
 }

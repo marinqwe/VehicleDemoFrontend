@@ -9,7 +9,6 @@ function VehicleMakeFilter() {
   const handleSubmit = (e) => {
     e.preventDefault();
     vehicleMakeStore.getVehicleMakes();
-    console.log('SUBMITTED!');
   };
   return useObserver(() => (
     <StyledSearch onSubmit={(e) => handleSubmit(e)}>
