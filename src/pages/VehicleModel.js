@@ -5,14 +5,12 @@ import {
   VehicleModelsList,
   VehicleModelFilter,
   VehicleModelSorting,
-  VehicleModelPaging,
 } from '../components';
 import {
   Title,
   StyledLink,
   StyledVehiclePage,
   VehiclePageHeading,
-  StyledError,
 } from '../styles';
 
 function VehicleModel() {
@@ -38,15 +36,7 @@ function VehicleModel() {
           ➡ Add a new model
         </StyledLink>
       </div>
-      {vehicleModelStore.getErr ? (
-        <StyledError>{vehicleModelStore.getErr}</StyledError>
-      ) : (
-        <>
-          <VehicleModelPaging />
-          <VehicleModelsList vehicleModels={vehicleModelStore.vehicleModels} />
-          <VehicleModelPaging />
-        </>
-      )}
+      <VehicleModelsList vehicleModels={vehicleModelStore.vehicleModels} />
     </StyledVehiclePage>
   ));
 }

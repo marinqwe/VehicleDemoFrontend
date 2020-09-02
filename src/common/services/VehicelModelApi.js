@@ -2,45 +2,23 @@ import axios from 'axios';
 
 export default class VehicleModelApi {
   static getAll = (urlParams) =>
-    axios({
-      method: 'GET',
-      url: '/api/vehiclemodel',
+    axios.get('/api/vehiclemodel', {
       params: {
         ...urlParams,
       },
     });
 
-  static getVehicleModel = (id) =>
-    axios({
-      method: 'GET',
-      url: `/api/vehiclemodel/${id}`,
-    });
+  static getVehicleModel = (id) => axios.get(`/api/vehiclemodel/${id}`);
 
-  static createVehicleModel = (vehicle) =>
-    axios({
-      method: 'POST',
-      url: '/api/vehiclemodel',
-      data: {
-        ...vehicle,
-      },
-    });
+  static createVehicleModel = (vehicleModel) =>
+    axios.post('/api/vehiclemodel', { ...vehicleModel });
 
-  static deleteVehicleModel = (id) =>
-    axios({
-      method: 'DELETE',
-      url: `/api/vehiclemodel/${id}`,
-    });
+  static deleteVehicleModel = (id) => axios.delete(`/api/vehiclemodel/${id}`);
 
-  static updateVehicleModel = ({ id, name, abrv }) =>
-    axios({
-      method: 'PUT',
-      url: `/api/vehiclemodel/${id}`,
-      data: {
-        vehicleModel: {
-          id,
-          name,
-          abrv,
-        },
-      },
+  static editVehicleModel = ({ id, name, abrv }) =>
+    axios.put(`/api/vehiclemodel/${id}`, {
+      id,
+      name,
+      abrv,
     });
 }

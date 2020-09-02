@@ -9,7 +9,6 @@ function VehicleModelFilter() {
   const handleSubmit = (e) => {
     e.preventDefault();
     vehicleModelStore.getVehicleModels();
-    console.log('SUBMITTED!');
   };
   return useObserver(() => (
     <StyledSearch onSubmit={(e) => handleSubmit(e)}>

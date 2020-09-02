@@ -5,6 +5,7 @@ export function vehicleModelStore(vehicleModelApi) {
     {
       getErr: null,
       cudErr: null,
+      cudLoading: false,
       loadingModels: false,
       loadingModel: false,
       vehicleModels: [],
@@ -44,6 +45,7 @@ export function vehicleModelStore(vehicleModelApi) {
       },
       getVehicleModel(id) {
         this.getErr = null;
+        this.loadingModel = true;
         return vehicleModelApi
           .getVehicleModel(id)
           .then(({ data }) => {
@@ -55,27 +57,52 @@ export function vehicleModelStore(vehicleModelApi) {
             this.loadingModel = false;
           });
       },
-      createVehicleModel() {
+      createVehicleModel(vehicleModel) {
         this.cudErr = null;
-        return vehicleModelApi
-          .createVehicleModel(this.vehicleModel)
-          .catch((err) => {
-            this.cudErr = 'ERROR: Failed to create the model.';
-          });
+        if (!vehicleModel.name || !vehicleModel.abrv || !vehicleModel.makeId) {
+          this.cudErr = 'Please fill out the form before submitting.';
+        } else {
+          this.cudLoading = true;
+          return vehicleModelApi
+            .createVehicleModel(vehicleModel)
+            .then(() => {
+              this.cudLoading = false;
+            })
+            .catch((err) => {
+              this.cudErr = 'ERROR: Failed to create the model.';
+              this.cudLoading = false;
+            });
+        }
       },
-      editVehicleModel(id) {
+      editVehicleModel(id, vehicleModel) {
         this.cudErr = null;
-        return vehicleModelApi
-          .editVehicleModel({ id, ...this.vehicleModel })
-          .catch((err) => {
-            this.cudErr = 'ERROR: Failed to edit the model.';
-          });
+        if (!vehicleModel.name || !vehicleModel.abrv || !vehicleModel.makeId) {
+          this.cudErr = 'Please fill out the form before submitting.';
+        } else {
+          this.cudLoading = true;
+          return vehicleModelApi
+            .editVehicleModel({ id, ...vehicleModel })
+            .then(() => {
+              this.cudLoading = false;
+            })
+            .catch((err) => {
+              this.cudErr = 'ERROR: Failed to edit the model.';
+              this.cudLoading = false;
+            });
+        }
       },
       removeVehicleModel(id) {
         this.cudErr = null;
-        return vehicleModelApi.deleteVehicleModel(id).catch((err) => {
-          this.cudErr = 'ERROR: Failed to delete the model.';
-        });
+        this.cudLoading = true;
+        return vehicleModelApi
+          .deleteVehicleModel(id)
+          .then(() => {
+            this.cudLoading = false;
+          })
+          .catch((err) => {
+            this.cudErr = 'ERROR: Failed to delete the model.';
+            this.cudLoading = false;
+          });
       },
       setSortBy(sortBy) {
         this.sortBy = sortBy;

@@ -8,7 +8,7 @@ function VehicleMakePaging() {
 
   const handleOnClick = (val) => {
     const pageNumber = vehicleMakeStore.pagingInfo.pageNumber + val;
-    
+
     vehicleMakeStore.setPageNumber(pageNumber);
     vehicleMakeStore.getVehicleMakes();
   };

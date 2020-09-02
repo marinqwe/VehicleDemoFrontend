@@ -5,14 +5,12 @@ import {
   VehicleMakesList,
   VehicleMakeFilter,
   VehicleMakeSorting,
-  VehicleMakePaging,
 } from '../components';
 import {
   Title,
   StyledVehiclePage,
   VehiclePageHeading,
   StyledLink,
-  StyledError,
 } from '../styles';
 
 function VehicleMake() {
@@ -38,15 +36,7 @@ function VehicleMake() {
           ➡ Create new vehicle
         </StyledLink>
       </div>
-      {vehicleMakeStore.getErr ? (
-        <StyledError>{vehicleMakeStore.getErr}</StyledError>
-      ) : (
-        <>
-          <VehicleMakePaging />
-          <VehicleMakesList vehicleMakes={vehicleMakeStore.vehicleMakes} />
-          <VehicleMakePaging />
-        </>
-      )}
+      <VehicleMakesList vehicleMakes={vehicleMakeStore.vehicleMakes} />
     </StyledVehiclePage>
   ));
 }

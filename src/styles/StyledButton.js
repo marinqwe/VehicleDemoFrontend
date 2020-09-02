@@ -12,6 +12,9 @@ export const GreenButton = styled.button`
   appearance: none;
   font-size: calc(8px + 2vmin);
   min-width: 90px;
+  &[disabled] {
+    opacity: 0.5;
+  }
 `;
 
 export const CancelButton = styled.p`
