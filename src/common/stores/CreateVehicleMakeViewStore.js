@@ -9,11 +9,11 @@ const initialStoreData = {
   },
 };
 
-export function createVehicleMakeViewStore(vehicleMakeApi) {
+export function createVehicleMakeViewStore(vehicleMakeApi, history) {
   return observable(
     {
       ...initialStoreData,
-      async save(history) {
+      async save() {
         if (!this.vehicleMake.name || !this.vehicleMake.abrv) {
           this.error = 'Please fill out the form before submitting.';
         } else {

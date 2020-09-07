@@ -9,6 +9,7 @@ import {
 } from '../stores';
 import { VehicleMakeApi } from '../services/VehicleMakeApi';
 import { VehicleModelApi } from '../services/VehicelModelApi';
+import history from '../services/history';
 
 const vehicleMakeApiUrl = '/api/vehiclemake';
 const vehicleModelApiUrl = '/api/vehiclemodel';
@@ -23,6 +24,6 @@ export const storesContext = React.createContext({
   vehicleModelStore: vehicleModelStore(modelApi),
   editVehicleMakeViewStore: editVehicleMakeViewStore(makeApi),
   editVehicleModelViewStore: editVehicleModelViewStore(modelApi),
-  createVehicleMakeViewStore: createVehicleMakeViewStore(makeApi),
+  createVehicleMakeViewStore: createVehicleMakeViewStore(makeApi, history),
   createVehicleModelViewStore: createVehicleModelViewStore(modelApi),
 });
