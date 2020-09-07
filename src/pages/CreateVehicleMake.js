@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import {
@@ -7,21 +7,15 @@ import {
   CancelButton,
   ButtonGroup,
   StyledError,
-  StyledInput,
 } from '../styles';
+import VehicleInput from '../components/VehicleInput';
 
 function CreateVehicleMake({ history }) {
-  const { vehicleMakeStore } = useStores();
-  const [name, setName] = useState('');
-  const [abrv, setAbrv] = useState('');
+  const { createVehicleMakeViewStore } = useStores();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await vehicleMakeStore.createVehicleMake({ name, abrv });
-
-    if (!vehicleMakeStore.cudErr) {
-      history.push('/vehicle-makes');
-    }
+    await createVehicleMakeViewStore.save(history);
   };
   return useObserver(() => (
     <div>
@@ -29,35 +23,38 @@ function CreateVehicleMake({ history }) {
       <StyledForm onSubmit={handleSubmit}>
         <label>
           Name: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name='name'
+            value={createVehicleMakeViewStore.vehicleMake.name}
+            storeKey={createVehicleMakeViewStore.vehicleMake}
             placeholder='Name'
           />
         </label>
         <label>
           Abrv: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={abrv}
-            onChange={(e) => setAbrv(e.target.value)}
+            name='abrv'
+            value={createVehicleMakeViewStore.vehicleMake.abrv}
+            storeKey={createVehicleMakeViewStore.vehicleMake}
             placeholder='Abrv'
           />
         </label>
 
         <ButtonGroup>
-          <GreenButton disabled={vehicleMakeStore.cudLoading}>
+          <GreenButton disabled={createVehicleMakeViewStore.loading}>
             Confirm
           </GreenButton>
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
-      {!vehicleMakeStore.cudErr && vehicleMakeStore.cudLoading && (
-        <p>Creating vehicle, please wait...</p>
-      )}
-      {vehicleMakeStore.cudErr && (
-        <StyledError>{vehicleMakeStore.cudErr}</StyledError>
+      {!createVehicleMakeViewStore.error &&
+        createVehicleMakeViewStore.loading && (
+          <p>Creating vehicle, please wait...</p>
+        )}
+      {createVehicleMakeViewStore.error && (
+        <StyledError>{createVehicleMakeViewStore.error}</StyledError>
       )}
     </div>
   ));

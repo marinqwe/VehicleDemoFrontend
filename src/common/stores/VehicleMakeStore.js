@@ -20,7 +20,7 @@ export function vehicleMakeStore(vehicleMakeApi) {
         name: '',
         abrv: '',
       },
-      getVehicleMakes() {
+      async getVehicleMakes() {
         this.getErr = null;
         this.loadingVehicles = true;
 
@@ -29,80 +29,70 @@ export function vehicleMakeStore(vehicleMakeApi) {
           searchString: this.searchString,
           page: this.pagingInfo.pageNumber,
         };
-        vehicleMakeApi
-          .getAll(params)
-          .then(({ data }) => {
-            this.vehicleMakes = [...data.vehicles];
-            this.pagingInfo = {
-              ...data.pagingInfo,
-            };
-            this.loadingVehicles = false;
-          })
-          .catch((err) => {
-            this.getErr = 'ERROR: Unable to fetch vehicles.';
-            this.loadingVehicles = false;
-          });
+        try {
+          const { data } = await vehicleMakeApi.getAll(params);
+          this.vehicleMakes = data.vehicles;
+          this.pagingInfo = {
+            ...data.pagingInfo,
+          };
+          this.loadingVehicles = false;
+        } catch (error) {
+          this.getErr = 'ERROR: Unable to fetch vehicles.';
+          this.loadingVehicles = false;
+        }
       },
-      getVehicleMake(makeId) {
+      async getVehicleMake(makeId) {
         this.getErr = null;
         this.loadingVehicle = true;
-        return vehicleMakeApi
-          .getVehicleMake(makeId)
-          .then(({ data }) => {
-            this.vehicleMake = { ...data };
-            this.loadingVehicle = false;
-          })
-          .catch((err) => {
-            this.getErr = 'ERROR: Unable to fetch the vehicle.';
-            this.loadingVehicle = false;
-          });
+        try {
+          const { data } = await vehicleMakeApi.getVehicleMake(makeId);
+          this.vehicleMake = { ...data };
+          this.loadingVehicle = false;
+        } catch (error) {
+          this.getErr = 'ERROR: Unable to fetch the vehicle.';
+          this.loadingVehicle = false;
+        }
       },
-      createVehicleMake(vehicleMake) {
+      async createVehicleMake(vehicleMake) {
         this.cudErr = null;
         if (!vehicleMake.name || !vehicleMake.abrv) {
           this.cudErr = 'Please fill out the form before submitting.';
         } else {
           this.cudLoading = true;
-          return vehicleMakeApi
-            .createVehicleMake(vehicleMake)
-            .then(() => {
-              this.cudLoading = false;
-            })
-            .catch((err) => {
-              this.cudLoading = false;
-              this.cudErr = 'ERROR: Failed to create the vehicle.';
-            });
+          try {
+            await vehicleMakeApi.createVehicleMake(vehicleMake);
+            this.cudLoading = false;
+          } catch (error) {
+            this.cudLoading = false;
+            this.cudErr = 'ERROR: Failed to create the vehicle.';
+          }
         }
       },
-      editVehicleMake(makeId, vehicleMake) {
+      async editVehicleMake(makeId, vehicleMake) {
         this.cudErr = null;
         if (!vehicleMake.name || !vehicleMake.abrv) {
           this.cudErr = 'Please fill out the form before submitting.';
         } else {
           this.cudLoading = true;
-          return vehicleMakeApi
-            .editVehicleMake({ makeId, ...vehicleMake })
-            .then(() => {
-              this.cudLoading = false;
-            })
-            .catch((err) => {
-              this.cudLoading = false;
-              this.cudErr = 'ERROR: Failed to update the vehicle';
-            });
+          try {
+            await vehicleMakeApi.editVehicleMake({ makeId, ...vehicleMake });
+            this.cudLoading = false;
+          } catch (error) {
+            this.cudLoading = false;
+            this.cudErr = 'ERROR: Failed to update the vehicle';
+          }
         }
       },
-      removeVehicleMake(makeId) {
+      async removeVehicleMake(makeId) {
         this.cudLoading = true;
         this.cudErr = null;
-        return vehicleMakeApi
-          .deleteVehicleMake(makeId)
-          .then(() => {
-            this.cudLoading = false;
-          })
-          .catch((err) => {
-            this.cudLoading = false;
-            this.cudErr = 'ERROR: Failed to delete the vehicle.';
-          });
+        try {
+          await vehicleMakeApi.deleteVehicleMake(makeId);
+          this.cudLoading = false;
+        } catch (error) {
+          this.cudLoading = false;
+          this.cudErr = 'ERROR: Failed to delete the vehicle.';
+        }
       },
       setSortBy(sortBy) {
         this.sortBy = sortBy;

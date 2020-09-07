@@ -17,8 +17,8 @@ function App() {
     <StyledApp>
       <ErrorBoundary>
         <Route exact component={Home} path='/' />
-        <Route exact component={VehicleMake} path='/vehicle-makes' />
         <Route exact component={VehicleModel} path='/vehicle-models' />
+        <Route exact component={VehicleMake} path='/vehicle-makes' />
         <Route component={EditVehicleMake} path='/vehicle-makes/edit/:id' />
         <Route component={EditVehicleModel} path='/vehicle-models/edit/:id' />
         <Route component={CreateVehicleMake} path='/vehicle-makes/create' />

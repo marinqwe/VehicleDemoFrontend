@@ -1,24 +1,39 @@
 import axios from 'axios';
 
-export default class VehicleModelApi {
-  static getAll = (urlParams) =>
-    axios.get('/api/vehiclemodel', {
+class VehicleModelApi {
+  url;
+  constructor(url) {
+    this.url = url;
+  }
+
+  getAll(urlParams) {
+    return axios.get(this.url, {
       params: {
         ...urlParams,
       },
     });
+  }
 
-  static getVehicleModel = (id) => axios.get(`/api/vehiclemodel/${id}`);
+  getVehicleModel(id) {
+    return axios.get(`${this.url}/${id}`);
+  }
 
-  static createVehicleModel = (vehicleModel) =>
-    axios.post('/api/vehiclemodel', { ...vehicleModel });
+  createVehicleModel(vehicleModel) {
+    return axios.post(this.url, { ...vehicleModel });
+  }
 
-  static deleteVehicleModel = (id) => axios.delete(`/api/vehiclemodel/${id}`);
+  deleteVehicleModel(id) {
+    return axios.delete(`${this.url}/${id}`);
+  }
 
-  static editVehicleModel = ({ id, name, abrv }) =>
-    axios.put(`/api/vehiclemodel/${id}`, {
+  editVehicleModel({ id, name, abrv, makeId }) {
+    return axios.put(`${this.url}/${id}`, {
       id,
       name,
       abrv,
+      makeId
     });
+  }
 }
+
+export { VehicleModelApi };

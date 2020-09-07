@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import {
@@ -7,8 +7,8 @@ import {
   CancelButton,
   ButtonGroup,
   StyledError,
-  StyledInput,
 } from '../styles';
+import VehicleInput from '../components/VehicleInput';
 
 function EditVehicleMake({
   match: {
@@ -16,26 +16,15 @@ function EditVehicleMake({
   },
   history,
 }) {
-  const { vehicleMakeStore } = useStores();
-  const [name, setName] = useState('');
-  const [abrv, setAbrv] = useState('');
+  const { editVehicleMakeViewStore } = useStores();
 
   useEffect(() => {
-    async function fetchData() {
-      await vehicleMakeStore.getVehicleMake(id);
-      setName(vehicleMakeStore.vehicleMake.name);
-      setAbrv(vehicleMakeStore.vehicleMake.abrv);
-    }
-    fetchData();
-  }, [vehicleMakeStore, id]);
+    editVehicleMakeViewStore.getVehicleMake(id);
+  }, [editVehicleMakeViewStore, id]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await vehicleMakeStore.editVehicleMake(id, { name, abrv });
-
-    if (!vehicleMakeStore.cudErr) {
-      history.push('/vehicle-makes');
-    }
+    editVehicleMakeViewStore.save(id, history);
   };
 
   return useObserver(() => (
@@ -44,33 +33,37 @@ function EditVehicleMake({
       <StyledForm onSubmit={handleSubmit}>
         <label>
           Name: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={editVehicleMakeViewStore.vehicleMake.name}
+            name='name'
+            storeKey={editVehicleMakeViewStore.vehicleMake}
             placeholder='Name'
           />
         </label>
         <label>
           Abrv: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={abrv}
-            onChange={(e) => setAbrv(e.target.value)}
+            value={editVehicleMakeViewStore.vehicleMake.abrv}
+            name='abrv'
+            storeKey={editVehicleMakeViewStore.vehicleMake}
             placeholder='Abrv'
           />
         </label>
 
         <ButtonGroup>
-          <GreenButton>Confirm</GreenButton>
+          <GreenButton disabled={editVehicleMakeViewStore.loading}>
+            Confirm
+          </GreenButton>
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
-      {!vehicleMakeStore.cudErr && vehicleMakeStore.cudLoading && (
+      {!editVehicleMakeViewStore.error && editVehicleMakeViewStore.loading && (
         <p>Update submitted, please wait...</p>
       )}
-      {vehicleMakeStore.cudErr && (
-        <StyledError>{vehicleMakeStore.cudErr}</StyledError>
+      {editVehicleMakeViewStore.error && (
+        <StyledError>{editVehicleMakeViewStore.cudErr}</StyledError>
       )}
     </div>
   ));

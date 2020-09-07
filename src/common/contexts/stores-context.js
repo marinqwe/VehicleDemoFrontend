@@ -1,10 +1,28 @@
 import React from 'react';
-import { vehicleMakeStore } from '../stores/VehicleMakeStore';
-import { vehicleModelStore } from '../stores/VehicleModelStore';
-import VehicleMakeApi from '../services/VehicleMakeApi';
-import VehicleModelApi from '../services/VehicelModelApi';
+import {
+  vehicleMakeStore,
+  vehicleModelStore,
+  editVehicleMakeViewStore,
+  editVehicleModelViewStore,
+  createVehicleMakeViewStore,
+  createVehicleModelViewStore,
+} from '../stores';
+import { VehicleMakeApi } from '../services/VehicleMakeApi';
+import { VehicleModelApi } from '../services/VehicelModelApi';
+
+const vehicleMakeApiUrl = '/api/vehiclemake';
+const vehicleModelApiUrl = '/api/vehiclemodel';
+
+const makeApi = new VehicleMakeApi(vehicleMakeApiUrl);
+const modelApi = new VehicleModelApi(vehicleModelApiUrl);
+
+
 
 export const storesContext = React.createContext({
-  vehicleMakeStore: vehicleMakeStore(VehicleMakeApi),
-  vehicleModelStore: vehicleModelStore(VehicleModelApi),
+  vehicleMakeStore: vehicleMakeStore(makeApi),
+  vehicleModelStore: vehicleModelStore(modelApi),
+  editVehicleMakeViewStore: editVehicleMakeViewStore(makeApi),
+  editVehicleModelViewStore: editVehicleModelViewStore(modelApi),
+  createVehicleMakeViewStore: createVehicleMakeViewStore(makeApi),
+  createVehicleModelViewStore: createVehicleModelViewStore(modelApi),
 });

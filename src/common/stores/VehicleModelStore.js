@@ -19,9 +19,9 @@ export function vehicleModelStore(vehicleModelApi) {
       vehicleModel: {
         name: '',
         abrv: '',
-        makeId: 0,
+        makeId: null,
       },
-      getVehicleModels() {
+      async getVehicleModels() {
         this.getErr = null;
         this.loadingModels = true;
         const params = {
@@ -29,80 +29,70 @@ export function vehicleModelStore(vehicleModelApi) {
           searchString: this.searchString,
           page: this.pagingInfo.pageNumber,
         };
-        vehicleModelApi
-          .getAll(params)
-          .then(({ data }) => {
-            this.vehicleModels = [...data.models];
-            this.pagingInfo = {
-              ...data.pagingInfo,
-            };
-            this.loadingModels = false;
-          })
-          .catch((err) => {
-            this.getErr = 'ERROR: Unable to fetch models.';
-            this.loadingModels = false;
-          });
+        try {
+          const { data } = await vehicleModelApi.getAll(params);
+          this.vehicleModels = [...data.models];
+          this.pagingInfo = {
+            ...data.pagingInfo,
+          };
+          this.loadingModels = false;
+        } catch (error) {
+          this.getErr = 'ERROR: Unable to fetch models.';
+          this.loadingModels = false;
+        }
       },
-      getVehicleModel(id) {
+      async getVehicleModel(id) {
         this.getErr = null;
         this.loadingModel = true;
-        return vehicleModelApi
-          .getVehicleModel(id)
-          .then(({ data }) => {
-            this.vehicleModel = { ...data };
-            this.loadingModel = false;
-          })
-          .catch((err) => {
-            this.getErr = 'ERROR: Unable to fetch the model';
-            this.loadingModel = false;
-          });
+        try {
+          const { data } = await vehicleModelApi.getVehicleModel(id);
+          this.vehicleModel = { ...data };
+          this.loadingModel = false;
+        } catch (error) {
+          this.getErr = 'ERROR: Unable to fetch the model';
+          this.loadingModel = false;
+        }
       },
-      createVehicleModel(vehicleModel) {
+      async createVehicleModel(vehicleModel) {
         this.cudErr = null;
         if (!vehicleModel.name || !vehicleModel.abrv || !vehicleModel.makeId) {
           this.cudErr = 'Please fill out the form before submitting.';
         } else {
           this.cudLoading = true;
-          return vehicleModelApi
-            .createVehicleModel(vehicleModel)
-            .then(() => {
-              this.cudLoading = false;
-            })
-            .catch((err) => {
-              this.cudErr = 'ERROR: Failed to create the model.';
-              this.cudLoading = false;
-            });
+          try {
+            await vehicleModelApi.createVehicleModel(vehicleModel);
+            this.cudLoading = false;
+          } catch (error) {
+            this.cudErr = 'ERROR: Failed to create the model.';
+            this.cudLoading = false;
+          }
         }
       },
-      editVehicleModel(id, vehicleModel) {
+      async editVehicleModel(id, vehicleModel) {
         this.cudErr = null;
         if (!vehicleModel.name || !vehicleModel.abrv || !vehicleModel.makeId) {
           this.cudErr = 'Please fill out the form before submitting.';
         } else {
           this.cudLoading = true;
-          return vehicleModelApi
-            .editVehicleModel({ id, ...vehicleModel })
-            .then(() => {
-              this.cudLoading = false;
-            })
-            .catch((err) => {
-              this.cudErr = 'ERROR: Failed to edit the model.';
-              this.cudLoading = false;
-            });
+          try {
+            await vehicleModelApi.editVehicleModel({ id, ...vehicleModel });
+            this.cudLoading = false;
+          } catch (error) {
+            this.cudErr = 'ERROR: Failed to edit the model.';
+            this.cudLoading = false;
+          }
         }
       },
-      removeVehicleModel(id) {
+      async removeVehicleModel(id) {
         this.cudErr = null;
         this.cudLoading = true;
-        return vehicleModelApi
-          .deleteVehicleModel(id)
-          .then(() => {
-            this.cudLoading = false;
-          })
-          .catch((err) => {
-            this.cudErr = 'ERROR: Failed to delete the model.';
-            this.cudLoading = false;
-          });
+        try {
+          await vehicleModelApi.deleteVehicleModel(id);
+          this.cudLoading = false;
+        } catch (error) {
+          this.cudErr = 'ERROR: Failed to delete the model.';
+          this.cudLoading = false;
+        }
       },
       setSortBy(sortBy) {
         this.sortBy = sortBy;

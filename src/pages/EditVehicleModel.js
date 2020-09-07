@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useStores } from '../common/stores/use-stores';
 import { useObserver } from 'mobx-react';
 import {
@@ -7,8 +7,8 @@ import {
   CancelButton,
   ButtonGroup,
   StyledError,
-  StyledInput,
 } from '../styles';
+import VehicleInput from '../components/VehicleInput';
 
 function EditVehicleModel({
   match: {
@@ -16,28 +16,15 @@ function EditVehicleModel({
   },
   history,
 }) {
-  const { vehicleModelStore } = useStores();
-  const [name, setName] = useState('');
-  const [abrv, setAbrv] = useState('');
-  const [makeId, setMakeId] = useState('');
+  const { editVehicleModelViewStore } = useStores();
 
   useEffect(() => {
-    vehicleModelStore.getVehicleModel(id);
-    async function fetchData() {
-      await vehicleModelStore.getVehicleModel(id);
-      setName(vehicleModelStore.vehicleModel.name);
-      setAbrv(vehicleModelStore.vehicleModel.abrv);
-      setMakeId(vehicleModelStore.vehicleModel.makeId);
-    }
-    fetchData();
-  }, [vehicleModelStore, id]);
+    editVehicleModelViewStore.getVehicleModel(id);
+  }, [editVehicleModelViewStore, id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await vehicleModelStore.editVehicleModel(id, { name, abrv, makeId });
-    if (!vehicleModelStore.cudErr) {
-      history.push('/vehicle-models');
-    }
+    await editVehicleModelViewStore.save(id, history);
   };
 
   return useObserver(() => (
@@ -46,44 +33,47 @@ function EditVehicleModel({
       <StyledForm onSubmit={handleSubmit}>
         <label>
           MakeId: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={makeId}
-            onChange={(e) => setMakeId(e.target.value)}
+            name='makeId'
+            value={editVehicleModelViewStore.vehicleModel.makeId}
+            storeKey={editVehicleModelViewStore.vehicleModel}
             placeholder='Make Id'
           />
         </label>
         <label>
           Name: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name='name'
+            value={editVehicleModelViewStore.vehicleModel.name}
+            storeKey={editVehicleModelViewStore.vehicleModel}
             placeholder='Name'
           />
         </label>
         <label>
           Abrv: <br />
-          <StyledInput
+          <VehicleInput
             type='text'
-            value={abrv}
-            onChange={(e) => setAbrv(e.target.value)}
+            name='abrv'
+            value={editVehicleModelViewStore.vehicleModel.abrv}
+            storeKey={editVehicleModelViewStore.vehicleModel}
             placeholder='Abrv'
           />
         </label>
 
         <ButtonGroup>
-          <GreenButton disabled={vehicleModelStore.cudLoading}>
+          <GreenButton disabled={editVehicleModelViewStore.loading}>
             Confirm
           </GreenButton>
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
-      {!vehicleModelStore.cudErr && vehicleModelStore.cudLoading && (
+      {!editVehicleModelViewStore.error && editVehicleModelViewStore.loading && (
         <p>Update submitted, please wait...</p>
       )}
-      {vehicleModelStore.cudErr && (
-        <StyledError>{vehicleModelStore.cudErr}</StyledError>
+      {editVehicleModelViewStore.error && (
+        <StyledError>{editVehicleModelViewStore.error}</StyledError>
       )}
     </div>
   ));
