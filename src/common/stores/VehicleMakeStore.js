@@ -4,8 +4,8 @@ export function vehicleMakeStore(vehicleMakeApi) {
   return observable(
     {
       getErr: null,
-      cudErr: null,
-      cudLoading: false,
+      deleteErr: null,
+      isDeleting: false,
       loadingVehicles: false,
       loadingVehicle: false,
       vehicleMakes: [],
@@ -15,10 +15,6 @@ export function vehicleMakeStore(vehicleMakeApi) {
         pageNumber: 1,
         totalCount: 0,
         resultsPerPage: 0,
-      },
-      vehicleMake: {
-        name: '',
-        abrv: '',
       },
       async getVehicleMakes() {
         this.getErr = null;
@@ -53,45 +49,15 @@ export function vehicleMakeStore(vehicleMakeApi) {
           this.loadingVehicle = false;
         }
       },
-      async createVehicleMake(vehicleMake) {
-        this.cudErr = null;
-        if (!vehicleMake.name || !vehicleMake.abrv) {
-          this.cudErr = 'Please fill out the form before submitting.';
-        } else {
-          this.cudLoading = true;
-          try {
-            await vehicleMakeApi.createVehicleMake(vehicleMake);
-            this.cudLoading = false;
-          } catch (error) {
-            this.cudLoading = false;
-            this.cudErr = 'ERROR: Failed to create the vehicle.';
-          }
-        }
-      },
-      async editVehicleMake(makeId, vehicleMake) {
-        this.cudErr = null;
-        if (!vehicleMake.name || !vehicleMake.abrv) {
-          this.cudErr = 'Please fill out the form before submitting.';
-        } else {
-          this.cudLoading = true;
-          try {
-            await vehicleMakeApi.editVehicleMake({ makeId, ...vehicleMake });
-            this.cudLoading = false;
-          } catch (error) {
-            this.cudLoading = false;
-            this.cudErr = 'ERROR: Failed to update the vehicle';
-          }
-        }
-      },
       async removeVehicleMake(makeId) {
-        this.cudLoading = true;
-        this.cudErr = null;
+        this.isDeleting = true;
+        this.deleteErr = null;
         try {
           await vehicleMakeApi.deleteVehicleMake(makeId);
-          this.cudLoading = false;
+          this.isDeleting = false;
         } catch (error) {
-          this.cudLoading = false;
-          this.cudErr = 'ERROR: Failed to delete the vehicle.';
+          this.isDeleting = false;
+          this.deleteErr = 'ERROR: Failed to delete the vehicle.';
         }
       },
       setSortBy(sortBy) {
@@ -111,8 +77,6 @@ export function vehicleMakeStore(vehicleMakeApi) {
     {
       getVehicleMakes: action,
       getVehicleMake: action,
-      createVehicleMake: action,
-      editVehicleMake: action,
       removeVehicleMake: action,
       setSortBy: action,
       setPageNumber: action,

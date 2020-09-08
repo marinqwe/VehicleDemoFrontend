@@ -21,7 +21,7 @@ export default function VehicleMakesList({ vehicleMakes }) {
       return <p>Loading vehicles...</p>;
     }
 
-    if (vehicleMakeStore.cudLoading) {
+    if (vehicleMakeStore.isDeleting) {
       return <p>Removing vehicle...</p>;
     }
 

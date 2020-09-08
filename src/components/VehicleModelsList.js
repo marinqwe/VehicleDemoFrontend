@@ -20,7 +20,7 @@ export default function VehicleModelsList({ vehicleModels }) {
     if (vehicleModelStore.loadingModels) {
       return <p>Loading models...</p>;
     }
-    if (vehicleModelStore.cudLoading) {
+    if (vehicleModelStore.isDeleting) {
       return <p>Removing model...</p>;
     }
 

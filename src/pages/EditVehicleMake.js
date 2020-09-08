@@ -63,7 +63,7 @@ function EditVehicleMake({
         <p>Update submitted, please wait...</p>
       )}
       {editVehicleMakeViewStore.error && (
-        <StyledError>{editVehicleMakeViewStore.cudErr}</StyledError>
+        <StyledError>{editVehicleMakeViewStore.error}</StyledError>
       )}
     </div>
   ));
