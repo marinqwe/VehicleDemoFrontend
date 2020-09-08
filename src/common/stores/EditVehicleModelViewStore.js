@@ -11,7 +11,7 @@ const initialStoreData = {
   },
 };
 
-export function editVehicleModelViewStore(vehicleModelApi) {
+export function editVehicleModelViewStore(vehicleModelApi, history) {
   return observable(
     {
       ...initialStoreData,
@@ -20,7 +20,7 @@ export function editVehicleModelViewStore(vehicleModelApi) {
         this.loading = true;
         try {
           const { data } = await vehicleModelApi.getVehicleModel(id);
-          console.log(data)
+
           this.vehicleModel = { ...data };
           this.loading = false;
         } catch (error) {
@@ -28,7 +28,7 @@ export function editVehicleModelViewStore(vehicleModelApi) {
           this.loading = false;
         }
       },
-      async save(id, history) {
+      async save(id) {
         try {
           this.error = null;
           this.loading = true;
@@ -38,16 +38,23 @@ export function editVehicleModelViewStore(vehicleModelApi) {
             ...this.vehicleModel,
           });
           this.loading = false;
+          this.resetState();
           history.push('/vehicle-models');
         } catch (error) {
           this.error = 'Something went wrong. Edit failed.';
           this.loading = false;
         }
       },
+      resetState() {
+        Object.keys(initialStoreData).forEach((key) => {
+          this[key] = initialStoreData[key];
+        });
+      },
     },
     {
       getVehicleModel: action,
       save: action,
+      resetState: action,
     }
   );
 }

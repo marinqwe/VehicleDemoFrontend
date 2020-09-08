@@ -10,7 +10,7 @@ const initialStoreData = {
   },
 };
 
-export function editVehicleMakeViewStore(vehicleMakeApi) {
+export function editVehicleMakeViewStore(vehicleMakeApi, history) {
   return observable(
     {
       ...initialStoreData,
@@ -26,7 +26,7 @@ export function editVehicleMakeViewStore(vehicleMakeApi) {
           this.loading = false;
         }
       },
-      async save(makeId, history) {
+      async save(makeId) {
         try {
           this.error = null;
           this.loading = true;
@@ -36,16 +36,23 @@ export function editVehicleMakeViewStore(vehicleMakeApi) {
             ...this.vehicleMake,
           });
           this.loading = false;
+          this.resetState();
           history.push('/vehicle-makes');
         } catch (error) {
           this.error = 'Something went wrong. Edit failed.';
           this.loading = false;
         }
       },
+      resetState() {
+        Object.keys(initialStoreData).forEach(key => {
+          this[key] = initialStoreData[key];
+        })
+      },
     },
     {
       getVehicleMake: action,
       save: action,
+      resetState: action
     }
   );
 }

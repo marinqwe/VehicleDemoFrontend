@@ -9,13 +9,14 @@ import {
   StyledError,
 } from '../styles';
 import VehicleInput from '../components/VehicleInput';
+import history from '../common/services/history';
 
-function CreateVehicleModel({ history }) {
+function CreateVehicleModel() {
   const { createVehicleModelViewStore } = useStores();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createVehicleModelViewStore.save(history);
+    await createVehicleModelViewStore.save();
   };
 
   return useObserver(() => (

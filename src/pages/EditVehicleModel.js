@@ -9,12 +9,12 @@ import {
   StyledError,
 } from '../styles';
 import VehicleInput from '../components/VehicleInput';
+import history from '../common/services/history';
 
 function EditVehicleModel({
   match: {
     params: { id },
   },
-  history,
 }) {
   const { editVehicleModelViewStore } = useStores();
 
@@ -24,7 +24,7 @@ function EditVehicleModel({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await editVehicleModelViewStore.save(id, history);
+    await editVehicleModelViewStore.save(id);
   };
 
   return useObserver(() => (
@@ -69,9 +69,10 @@ function EditVehicleModel({
           <CancelButton onClick={() => history.goBack()}>Cancel</CancelButton>
         </ButtonGroup>
       </StyledForm>
-      {!editVehicleModelViewStore.error && editVehicleModelViewStore.loading && (
-        <p>Update submitted, please wait...</p>
-      )}
+      {!editVehicleModelViewStore.error &&
+        editVehicleModelViewStore.loading && (
+          <p>Update submitted, please wait...</p>
+        )}
       {editVehicleModelViewStore.error && (
         <StyledError>{editVehicleModelViewStore.error}</StyledError>
       )}

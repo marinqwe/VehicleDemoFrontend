@@ -10,12 +10,16 @@ const initialStoreData = {
   },
 };
 
-export function createVehicleModelViewStore(vehicleModelApi) {
+export function createVehicleModelViewStore(vehicleModelApi, history) {
   return observable(
     {
       ...initialStoreData,
-      async save(history) {
-        if (!this.vehicleModel.name || !this.vehicleModel.abrv ||!this.vehicleModel.makeId) {
+      async save() {
+        if (
+          !this.vehicleModel.name ||
+          !this.vehicleModel.abrv ||
+          !this.vehicleModel.makeId
+        ) {
           this.error = 'Please fill out the form before submitting.';
         } else {
           try {
@@ -23,6 +27,7 @@ export function createVehicleModelViewStore(vehicleModelApi) {
             this.loading = true;
             await vehicleModelApi.createVehicleModel(this.vehicleModel);
             this.loading = false;
+            this.resetState();
             history.push('/vehicle-models');
           } catch (error) {
             this.loading = false;
@@ -30,9 +35,15 @@ export function createVehicleModelViewStore(vehicleModelApi) {
           }
         }
       },
+      resetState() {
+        Object.keys(initialStoreData).forEach(key => {
+          this[key] = initialStoreData[key];
+        })
+      },
     },
     {
       save: action,
+      resetState: action
     }
   );
 }

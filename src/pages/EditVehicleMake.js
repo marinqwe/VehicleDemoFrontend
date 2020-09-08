@@ -9,12 +9,12 @@ import {
   StyledError,
 } from '../styles';
 import VehicleInput from '../components/VehicleInput';
+import history from '../common/services/history';
 
 function EditVehicleMake({
   match: {
     params: { id },
   },
-  history,
 }) {
   const { editVehicleMakeViewStore } = useStores();
 
@@ -24,7 +24,7 @@ function EditVehicleMake({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    editVehicleMakeViewStore.save(id, history);
+    editVehicleMakeViewStore.save(id);
   };
 
   return useObserver(() => (
