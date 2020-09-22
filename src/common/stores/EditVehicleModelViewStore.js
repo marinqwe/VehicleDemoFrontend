@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action, decorate, extendObservable } from 'mobx';
 
 const initialStoreData = {
   error: null,
@@ -11,50 +11,56 @@ const initialStoreData = {
   },
 };
 
-export function editVehicleModelViewStore(vehicleModelApi, history) {
-  return observable(
-    {
-      ...initialStoreData,
-      async getVehicleModel(id) {
-        this.error = null;
-        this.loading = true;
-        try {
-          const { data } = await vehicleModelApi.getVehicleModel(id);
+class EditVehicleModelViewStore {
+  vehicleModelApi;
+  history;
+  constructor(vehicleModelApi, history) {
+    this.vehicleModelApi = vehicleModelApi;
+    this.history = history;
+    extendObservable(this, { ...initialStoreData });
+  }
 
-          this.vehicleModel = { ...data };
-          this.loading = false;
-        } catch (error) {
-          this.error = 'ERROR: Unable to fetch the vehicle.';
-          this.loading = false;
-        }
-      },
-      async save(id) {
-        try {
-          this.error = null;
-          this.loading = true;
+  async getVehicleModel(id) {
+    this.error = null;
+    this.loading = true;
+    try {
+      const { data } = await this.vehicleModelApi.getVehicleModel(id);
 
-          await vehicleModelApi.editVehicleModel({
-            id,
-            ...this.vehicleModel,
-          });
-          this.loading = false;
-          this.resetState();
-          history.push('/vehicle-models');
-        } catch (error) {
-          this.error = 'Something went wrong. Edit failed.';
-          this.loading = false;
-        }
-      },
-      resetState() {
-        Object.keys(initialStoreData).forEach((key) => {
-          this[key] = initialStoreData[key];
-        });
-      },
-    },
-    {
-      getVehicleModel: action,
-      save: action,
-      resetState: action,
+      this.vehicleModel = { ...data };
+      this.loading = false;
+    } catch (error) {
+      this.error = 'ERROR: Unable to fetch the vehicle.';
+      this.loading = false;
     }
-  );
+  }
+  async save(id) {
+    try {
+      this.error = null;
+      this.loading = true;
+
+      await this.vehicleModelApi.editVehicleModel({
+        id,
+        ...this.vehicleModel,
+      });
+      this.loading = false;
+      this.resetState();
+      this.history.push('/vehicle-models');
+    } catch (error) {
+      this.error = 'Something went wrong. Edit failed.';
+      this.loading = false;
+    }
+  }
+  resetState() {
+    Object.keys(initialStoreData).forEach(key => {
+      this[key] = initialStoreData[key];
+    })
+  }
 }
+
+decorate(EditVehicleModelViewStore, {
+  save: action,
+  getVehicleModel: action,
+  resetState: action,
+});
+
+export { EditVehicleModelViewStore };

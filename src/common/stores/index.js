@@ -1,15 +1,15 @@
-import { vehicleMakeStore } from './VehicleMakeStore';
-import { vehicleModelStore } from './VehicleModelStore';
-import { editVehicleMakeViewStore } from './EditVehicleMakeViewStore';
-import { editVehicleModelViewStore } from './EditVehicleModelViewStore';
-import { createVehicleMakeViewStore } from './CreateVehicleMakeViewStore';
-import { createVehicleModelViewStore } from './CreateVehicleModelViewStore';
+import { VehicleMakeStore } from './VehicleMakeStore';
+import { VehicleModelStore } from './VehicleModelStore';
+import { EditVehicleMakeViewStore } from './EditVehicleMakeViewStore';
+import { EditVehicleModelViewStore } from './EditVehicleModelViewStore';
+import { CreateVehicleMakeViewStore } from './CreateVehicleMakeViewStore';
+import { CreateVehicleModelViewStore } from './CreateVehicleModelViewStore';
 
 export {
-  editVehicleMakeViewStore,
-  editVehicleModelViewStore,
-  createVehicleMakeViewStore,
-  createVehicleModelViewStore,
-  vehicleMakeStore,
-  vehicleModelStore,
+  EditVehicleMakeViewStore,
+  EditVehicleModelViewStore,
+  CreateVehicleMakeViewStore,
+  CreateVehicleModelViewStore,
+  VehicleMakeStore,
+  VehicleModelStore,
 };
