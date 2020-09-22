@@ -46,11 +46,9 @@ class EditVehicleMakeViewStore {
     }
   }
   resetState() {
-    this.vehicleMake = {
-      name: '',
-      abrv: '',
-      makeId: null,
-    };
+    Object.keys(initialStoreData).forEach(key => {
+      this[key] = initialStoreData[key];
+    })
   }
 }
 decorate(EditVehicleMakeViewStore, {

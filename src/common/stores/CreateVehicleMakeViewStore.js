@@ -36,7 +36,9 @@ class CreateVehicleMakeViewStore {
     }
   }
   resetState() {
-    this.vehicleMake = { name: '', abrv: '' };
+    Object.keys(initialStoreData).forEach(key => {
+      this[key] = initialStoreData[key];
+    })
   }
 }
 decorate(CreateVehicleMakeViewStore, {

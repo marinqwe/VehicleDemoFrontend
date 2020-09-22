@@ -41,11 +41,9 @@ class CreateVehicleModelViewStore {
     }
   }
   resetState() {
-    this.vehicleModel = {
-      name: '',
-      abrv: '',
-      makeId: null,
-    };
+    Object.keys(initialStoreData).forEach(key => {
+      this[key] = initialStoreData[key];
+    })
   }
 }
 decorate(CreateVehicleModelViewStore, {
