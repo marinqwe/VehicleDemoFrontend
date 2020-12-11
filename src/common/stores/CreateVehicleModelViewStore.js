@@ -1,4 +1,4 @@
-import { extendObservable, action, decorate } from 'mobx';
+import { extendObservable, action, decorate, runInAction } from 'mobx';
 
 const initialStoreData = {
   error: null,
@@ -31,19 +31,23 @@ class CreateVehicleModelViewStore {
         this.error = null;
         this.loading = true;
         await this.vehicleModelApi.createVehicleModel(this.vehicleModel);
-        this.loading = false;
-        this.resetState();
-        this.history.push('/vehicle-models');
+        runInAction(() => {
+          this.loading = false;
+          this.resetState();
+          this.history.push('/vehicle-models');
+        });
       } catch (error) {
-        this.loading = false;
-        this.error = 'ERROR: Failed to create the vehicle.';
+        runInAction(() => {
+          this.loading = false;
+          this.error = 'ERROR: Failed to create the vehicle.';
+        });
       }
     }
   }
   resetState() {
-    Object.keys(initialStoreData).forEach(key => {
+    Object.keys(initialStoreData).forEach((key) => {
       this[key] = initialStoreData[key];
-    })
+    });
   }
 }
 decorate(CreateVehicleModelViewStore, {

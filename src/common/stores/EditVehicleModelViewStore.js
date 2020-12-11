@@ -1,4 +1,4 @@
-import { action, decorate, extendObservable } from 'mobx';
+import { action, decorate, extendObservable, runInAction } from 'mobx';
 
 const initialStoreData = {
   error: null,
@@ -26,11 +26,15 @@ class EditVehicleModelViewStore {
     try {
       const { data } = await this.vehicleModelApi.getVehicleModel(id);
 
-      this.vehicleModel = { ...data };
-      this.loading = false;
+      runInAction(() => {
+        this.vehicleModel = { ...data };
+        this.loading = false;
+      });
     } catch (error) {
-      this.error = 'ERROR: Unable to fetch the vehicle.';
-      this.loading = false;
+      runInAction(() => {
+        this.error = 'ERROR: Unable to fetch the vehicle.';
+        this.loading = false;
+      });
     }
   }
   async save(id) {
@@ -42,18 +46,22 @@ class EditVehicleModelViewStore {
         id,
         ...this.vehicleModel,
       });
-      this.loading = false;
-      this.resetState();
-      this.history.push('/vehicle-models');
+      runInAction(() => {
+        this.loading = false;
+        this.resetState();
+        this.history.push('/vehicle-models');
+      });
     } catch (error) {
-      this.error = 'Something went wrong. Edit failed.';
-      this.loading = false;
+      runInAction(() => {
+        this.error = 'Something went wrong. Edit failed.';
+        this.loading = false;
+      });
     }
   }
   resetState() {
-    Object.keys(initialStoreData).forEach(key => {
+    Object.keys(initialStoreData).forEach((key) => {
       this[key] = initialStoreData[key];
-    })
+    });
   }
 }
 

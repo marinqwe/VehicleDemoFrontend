@@ -1,4 +1,4 @@
-import { observable, action, computed, decorate } from 'mobx';
+import { observable, action, computed, decorate, runInAction } from 'mobx';
 
 class VehicleModelStore {
   vehicleModelApi;
@@ -30,14 +30,18 @@ class VehicleModelStore {
     };
     try {
       const { data } = await this.vehicleModelApi.getAll(params);
-      this.vehicleModels = [...data.models];
-      this.pagingInfo = {
-        ...data.pagingInfo,
-      };
-      this.loadingModels = false;
+      runInAction(() => {
+        this.vehicleModels = [...data.models];
+        this.pagingInfo = {
+          ...data.pagingInfo,
+        };
+        this.loadingModels = false;
+      });
     } catch (error) {
-      this.getErr = 'ERROR: Unable to fetch models.';
-      this.loadingModels = false;
+      runInAction(() => {
+        this.getErr = 'ERROR: Unable to fetch models.';
+        this.loadingModels = false;
+      });
     }
   }
   async getVehicleModel(id) {
@@ -45,11 +49,15 @@ class VehicleModelStore {
     this.loadingModel = true;
     try {
       const { data } = await this.vehicleModelApi.getVehicleModel(id);
-      this.vehicleModel = { ...data };
-      this.loadingModel = false;
+      runInAction(() => {
+        this.vehicleModel = { ...data };
+        this.loadingModel = false;
+      });
     } catch (error) {
-      this.getErr = 'ERROR: Unable to fetch the model';
-      this.loadingModel = false;
+      runInAction(() => {
+        this.getErr = 'ERROR: Unable to fetch the model';
+        this.loadingModel = false;
+      });
     }
   }
   async removeVehicleModel(id) {
@@ -57,10 +65,14 @@ class VehicleModelStore {
     this.isDeleting = true;
     try {
       await this.vehicleModelApi.deleteVehicleModel(id);
-      this.isDeleting = false;
+      runInAction(() => {
+        this.isDeleting = false;
+      });
     } catch (error) {
-      this.deleteErr = 'ERROR: Failed to delete the model.';
-      this.isDeleting = false;
+      runInAction(() => {
+        this.deleteErr = 'ERROR: Failed to delete the model.';
+        this.isDeleting = false;
+      });
     }
   }
   setSortBy(sortBy) {

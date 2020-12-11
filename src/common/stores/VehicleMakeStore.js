@@ -1,4 +1,4 @@
-import { observable, action, computed, decorate } from 'mobx';
+import { observable, action, computed, decorate, runInAction } from 'mobx';
 
 class VehicleMakeStore {
   vehicleMakeApi;
@@ -31,14 +31,18 @@ class VehicleMakeStore {
     };
     try {
       const { data } = await this.vehicleMakeApi.getAll(params);
-      this.vehicleMakes = data.vehicles;
-      this.pagingInfo = {
-        ...data.pagingInfo,
-      };
-      this.loadingVehicles = false;
+      runInAction(() => {
+        this.vehicleMakes = data.vehicles;
+        this.pagingInfo = {
+          ...data.pagingInfo,
+        };
+        this.loadingVehicles = false;
+      });
     } catch (error) {
-      this.getErr = 'ERROR: Unable to fetch vehicles.';
-      this.loadingVehicles = false;
+      runInAction(() => {
+        this.getErr = 'ERROR: Unable to fetch vehicles.';
+        this.loadingVehicles = false;
+      });
     }
   }
 
@@ -47,11 +51,15 @@ class VehicleMakeStore {
     this.loadingVehicle = true;
     try {
       const { data } = await this.vehicleMakeApi.getVehicleMake(makeId);
-      this.vehicleMake = { ...data };
-      this.loadingVehicle = false;
+      runInAction(() => {
+        this.vehicleMake = { ...data };
+        this.loadingVehicle = false;
+      });
     } catch (error) {
-      this.getErr = 'ERROR: Unable to fetch the vehicle.';
-      this.loadingVehicle = false;
+      runInAction(() => {
+        this.getErr = 'ERROR: Unable to fetch the vehicle.';
+        this.loadingVehicle = false;
+      });
     }
   }
   async removeVehicleMake(makeId) {
@@ -59,10 +67,14 @@ class VehicleMakeStore {
     this.deleteErr = null;
     try {
       await this.vehicleMakeApi.deleteVehicleMake(makeId);
-      this.isDeleting = false;
+      runInAction(() => {
+        this.isDeleting = false;
+      });
     } catch (error) {
-      this.isDeleting = false;
-      this.deleteErr = 'ERROR: Failed to delete the vehicle.';
+      runInAction(() => {
+        this.isDeleting = false;
+        this.deleteErr = 'ERROR: Failed to delete the vehicle.';
+      });
     }
   }
   setSortBy(sortBy) {
