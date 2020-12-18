@@ -11,8 +11,10 @@ const initialStoreData = {
 
 class EditVehicleMakeViewStore {
   vehicleMakeApi;
-  constructor(vehicleMakeApi) {
+  history;
+  constructor(vehicleMakeApi, history) {
     this.vehicleMakeApi = vehicleMakeApi;
+    this.history = history;
     extendObservable(this, { ...initialStoreData });
   }
 
